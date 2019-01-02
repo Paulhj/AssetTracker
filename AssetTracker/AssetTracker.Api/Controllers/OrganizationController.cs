@@ -1,11 +1,9 @@
-﻿using AssetTracker.Api.Models;
-using AssetTracker.Core.Services;
+﻿using AssetTracker.Core.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace AssetTracker.Api.Controllers
@@ -32,7 +30,7 @@ namespace AssetTracker.Api.Controllers
 
             try
             {
-                var items = _mapper.Map<IEnumerable<OrganizationModel>>(
+                var items = _mapper.Map<IEnumerable<Model.Organization>>(
                     await _service.GetByUserId(userId));
 
                 return Ok(items);
@@ -48,7 +46,7 @@ namespace AssetTracker.Api.Controllers
         {
             try
             {
-                var item = _mapper.Map<OrganizationModel>(
+                var item = _mapper.Map<Model.Organization>(
                     _service.GetById(id));
 
                 if (item == null)

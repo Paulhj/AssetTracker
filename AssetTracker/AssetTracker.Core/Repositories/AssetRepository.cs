@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AssetTracker.Core.Repositories
 {
-    internal class AssetRepository : GenericRepository<Asset>
+    internal class AssetRepository : GenericRepository<Asset>, IAssetRepository
     {
         public AssetTrackerContext AssetTrackerContext { get { return (AssetTrackerContext)_context; } }
 
@@ -21,8 +21,9 @@ namespace AssetTracker.Core.Repositories
         public Asset GetById(int id)
         {
             return AssetTrackerContext.Assets
-                .Include(l => l.AssetLocations)
-                .Include(o => o.AssetOrganizations)
+                .Include(s => s.Status)
+                .Include(t => t.Type)
+                .Include(l => l.AssetLocations).ThenInclude(n => n.Location)
                 .FirstOrDefault(f => f.Id == id);
         }
 
@@ -30,10 +31,18 @@ namespace AssetTracker.Core.Repositories
             int organizationId, AssetCriteria criteria)
         {
 
+            //var test = 
+            //    AssetTrackerContext.Assets
+            //    .Include(s => s.Status)
+            //    .Include(t => t.Type)
+            //    .Include(l => l.AssetLocations).ThenInclude(n => n.Location)
+            //    .Where(o => o.AssetOrganizations.Any(a => a.OrganizationId == 3))
+            //    .ToList();
+
             IQueryable<Asset> query =
-                 FindIf(true, o => o.AssetOrganizations.Select(i => i.OrganizationId).Contains(organizationId));
-                 
-                 //FindIf(mode == 1, c => c.ExpireDt >= DateTime.Today)
+                FindIf(true, o => o.AssetOrganizations.Any(i => i.OrganizationId == organizationId));
+
+                //FindIf(true, c => c.CreateDt < DateTime.Today);
                 //.FindIf(mode == 2, c => c.ExpireDt >= DateTime.Today.Subtract(TimeSpan.FromDays(30)))
                 //.FindIf(mode == 3, c => c.ExpireDt >= DateTime.Today.Subtract(TimeSpan.FromDays(60)))
                 //.FindIf(afterDt.HasValue, c => c.ExpireDt >= afterDt)
@@ -41,8 +50,9 @@ namespace AssetTracker.Core.Repositories
                 //.FindIf(msgAudiences.Count > 0, c => msgTypes.Contains(c.MsgAudienceId));
 
             return await query
-                .Include(l => l.AssetLocations)
-                .Include(o => o.AssetOrganizations)
+                .Include(s => s.Status)
+                .Include(t => t.Type)
+                .Include(l => l.AssetLocations).ThenInclude(n => n.Location)
                 .ToListAsync();
         }
     }

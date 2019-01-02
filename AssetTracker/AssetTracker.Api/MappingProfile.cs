@@ -1,10 +1,6 @@
-﻿using AssetTracker.Api.Models;
-using AssetTracker.Core.Entities;
+﻿using AssetTracker.Core.Entities;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace AssetTracker.Api
 {
@@ -12,11 +8,28 @@ namespace AssetTracker.Api
     {
         public MappingProfile()
         {
-            CreateMap<Organization, OrganizationModel>()
+            CreateMap<Organization, Model.Organization>()
                 .ReverseMap();
 
-            CreateMap<User, UserModel>()
+            CreateMap<User, Model.User>()
                 .ReverseMap();
+
+            CreateMap<AssetLocation, Model.AssetLocation>()
+                .ForMember(dest => dest.LocationNm,
+                           opts => opts.MapFrom(src => src.Location.Name));
+
+            CreateMap<Asset, Model.Asset>()
+                .ForMember(dest => dest.TypeNm,
+                           opts => opts.MapFrom(src => src.Type.Name))
+                .ForMember(dest => dest.StatusNm,
+                           opts => opts.MapFrom(src => src.Status.Name))
+                .ForMember(dest => dest.CurrentLocation,
+                           opts => opts.MapFrom(src => src.AssetLocations
+                                .OrderByDescending(m => m.CreateDt)
+                                .First()))
+                .ForMember(dest => dest.AssetId,
+                           opts => opts.MapFrom(src => src.Id));
+
         }
     }
 }

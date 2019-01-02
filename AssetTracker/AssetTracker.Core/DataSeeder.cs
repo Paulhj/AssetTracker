@@ -101,12 +101,16 @@ namespace AssetTracker.Core
         {
             if (!context.Statuses.Any())
             {
+                var cotd = context.Organizations
+                    .Include(o => o.OrganizationUsers)
+                    .Single(s => s.Name == "Colorado Teardrops");
+
                 var items = new List<Status>
                 {
-                    new Status { Name = "Received" },
-                    new Status { Name = "Available" },
-                    new Status { Name = "Hold" },
-                    new Status { Name = "Sold" }
+                    new Status { Name = "Received", OrganizationId = cotd.Id },
+                    new Status { Name = "Available", OrganizationId = cotd.Id },
+                    new Status { Name = "Hold", OrganizationId = cotd.Id },
+                    new Status { Name = "Sold", OrganizationId = cotd.Id }
                 };
                 context.AddRange(items);
                 context.SaveChanges();
@@ -117,13 +121,17 @@ namespace AssetTracker.Core
         {
             if (!context.Types.Any())
             {
+                var cotd = context.Organizations
+                    .Include(o => o.OrganizationUsers)
+                    .Single(s => s.Name == "Colorado Teardrops");
+
                 var items = new List<Entities.Type>
                 {
-                    new Entities.Type { Name = "Basedrop" },
-                    new Entities.Type { Name = "Canyonland" },
-                    new Entities.Type { Name = "Mount Massive" },
-                    new Entities.Type { Name = "The Summit" },
-                    new Entities.Type { Name = "Custom" }
+                    new Entities.Type { Name = "Basedrop", OrganizationId = cotd.Id },
+                    new Entities.Type { Name = "Canyonland", OrganizationId = cotd.Id },
+                    new Entities.Type { Name = "Mount Massive", OrganizationId = cotd.Id },
+                    new Entities.Type { Name = "The Summit", OrganizationId = cotd.Id },
+                    new Entities.Type { Name = "Custom", OrganizationId = cotd.Id }
                 };
                 context.AddRange(items);
                 context.SaveChanges();

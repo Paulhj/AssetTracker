@@ -15,6 +15,10 @@ namespace AssetTracker.Core.Entities
         public int Id { get; set; }
 
         [Required]
+        public int OrganizationId { get; set; }
+        public Organization Organization { get; set; }
+
+        [Required]
         [StringLength(150, ErrorMessage = "Type Name cannot exceed 150 characters.")]
         public string Name { get; set; }
 
