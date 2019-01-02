@@ -133,7 +133,11 @@ namespace AssetTracker.Core.Migrations
                         .IsRequired()
                         .HasMaxLength(150);
 
+                    b.Property<int>("OrganizationId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId");
 
                     b.ToTable("Statuses");
                 });
@@ -148,7 +152,11 @@ namespace AssetTracker.Core.Migrations
                         .IsRequired()
                         .HasMaxLength(150);
 
+                    b.Property<int>("OrganizationId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId");
 
                     b.ToTable("Types");
                 });
@@ -219,6 +227,22 @@ namespace AssetTracker.Core.Migrations
                     b.HasOne("AssetTracker.Core.Entities.User", "User")
                         .WithMany("OrganizationUsers")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AssetTracker.Core.Entities.Status", b =>
+                {
+                    b.HasOne("AssetTracker.Core.Entities.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AssetTracker.Core.Entities.Type", b =>
+                {
+                    b.HasOne("AssetTracker.Core.Entities.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

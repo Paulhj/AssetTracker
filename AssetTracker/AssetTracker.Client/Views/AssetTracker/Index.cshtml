@@ -1,0 +1,71 @@
+﻿@model AssetTracker.Client.ViewModels.AssetsViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Tag
+            </th>
+            <th>
+                Description
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.Assets.Photo)
+            </th>*@
+            <th>
+                Create Date
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Type
+            </th>
+            <th>
+                Location
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Assets) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tag)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            @*<td>
+            @Html.DisplayFor(modelItem => item.Photo)
+        </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateDt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StatusNm)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TypeNm)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CurrentLocation.LocationNm)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.AssetId }) |
+                @Html.ActionLink("Details", "Details", new { id=item.AssetId }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.AssetId })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

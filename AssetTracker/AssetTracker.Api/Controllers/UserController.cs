@@ -1,11 +1,8 @@
-﻿using AssetTracker.Api.Models;
-using AssetTracker.Core.Services;
+﻿using AssetTracker.Core.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace AssetTracker.Api.Controllers
@@ -28,14 +25,14 @@ namespace AssetTracker.Api.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Get()
         {
-            var organizationId = 3; //TODO get this from Authentication
+            var id = 6; //TODO get this from Authentication
 
             try
             {
-                var items = _mapper.Map<IEnumerable<UserModel>>(
-                    await _service.GetByOrganizationId(organizationId));
+                var item = _mapper.Map<Model.User>(
+                    _service.GetById(id));
 
-                return Ok(items);
+                return Ok(item);
             }
             catch (Exception ex)
             {
@@ -48,7 +45,7 @@ namespace AssetTracker.Api.Controllers
         {
             try
             {
-                var item = _mapper.Map<UserModel>(
+                var item = _mapper.Map<Model.User>(
                     _service.GetById(id));
 
                 if (item == null)
