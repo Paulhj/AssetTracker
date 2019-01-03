@@ -6,6 +6,8 @@ namespace AssetTracker.Core
 {
     public class AssetTrackerContext : DbContext, IDbContext
     {
+        public AssetTrackerContext()
+        { }
 
         public AssetTrackerContext(DbContextOptions<AssetTrackerContext> options) : base (options)
         {

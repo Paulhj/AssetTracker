@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetTracker.Client", "AssetTracker.Client\AssetTracker.Client.csproj", "{63B40D73-5E80-4693-9BB2-9F0C9FD997F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetTracker.Model", "AssetTracker.Model\AssetTracker.Model.csproj", "{1CF2254F-B51D-4E06-8413-988C0FA6A66C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetTracker.Model", "AssetTracker.Model\AssetTracker.Model.csproj", "{1CF2254F-B51D-4E06-8413-988C0FA6A66C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jsd.IDP", "Jsd.IDP\Jsd.IDP.csproj", "{10EB0AE8-76EB-4D35-94DD-25264DB73D17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{1CF2254F-B51D-4E06-8413-988C0FA6A66C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CF2254F-B51D-4E06-8413-988C0FA6A66C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CF2254F-B51D-4E06-8413-988C0FA6A66C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10EB0AE8-76EB-4D35-94DD-25264DB73D17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10EB0AE8-76EB-4D35-94DD-25264DB73D17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10EB0AE8-76EB-4D35-94DD-25264DB73D17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10EB0AE8-76EB-4D35-94DD-25264DB73D17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

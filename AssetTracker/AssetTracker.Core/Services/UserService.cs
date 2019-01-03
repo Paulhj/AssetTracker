@@ -17,6 +17,11 @@ namespace AssetTracker.Core.Services
             _repository = new UserRepository(context);
         }
 
+        public IEnumerable<User> GetAll()
+        {
+            return _repository.GetAll();
+        }
+
         public User GetById(int id)
         {
             return _repository.GetById(id);
