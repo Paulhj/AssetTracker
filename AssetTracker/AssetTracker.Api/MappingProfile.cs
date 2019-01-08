@@ -30,6 +30,7 @@ namespace AssetTracker.Api
                 .ForMember(dest => dest.AssetId,
                            opts => opts.MapFrom(src => src.Id));
 
+            CreateMap<Model.AssetForCreation, Asset>();
         }
     }
 }

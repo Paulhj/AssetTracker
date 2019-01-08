@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System;
@@ -22,6 +23,40 @@ namespace AssetTracker.Client.Services
 
         public async Task<HttpClient> GetClient()
         {
+            string accessToken = string.Empty;
+
+            // get the current HttpContext to access the tokens
+            var currentContext = _httpContextAccessor.HttpContext;
+
+            // get access token
+            //accessToken = await currentContext.GetTokenAsync(
+            //    OpenIdConnectParameterNames.AccessToken);
+
+            // should we renew access & refresh tokens?
+            // get expires_at value
+            var expires_at = await currentContext.GetTokenAsync("expires_at");
+
+            // compare - make sure to use the exact date formats for comparison 
+            // (UTC, in this case)
+            if (string.IsNullOrWhiteSpace(expires_at)
+                || ((DateTime.Parse(expires_at).AddSeconds(-60)).ToUniversalTime() < DateTime.UtcNow))
+            {
+                //_httpClient.SetBearerToken(accessToken);
+                accessToken = await RenewTokens();
+            }
+            else
+            {
+                // get access token
+                accessToken = await currentContext
+                    .GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+            }
+
+            if (!string.IsNullOrWhiteSpace(accessToken))
+            {
+                // set as Bearer token
+                _httpClient.SetBearerToken(accessToken);
+            }
+
             _httpClient.BaseAddress = new Uri("https://localhost:44349/");
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(
@@ -30,19 +65,19 @@ namespace AssetTracker.Client.Services
             return _httpClient;
         }
 
-        /*
+        
         private async Task<string> RenewTokens()
         {
             // get the current HttpContext to access the tokens
             var currentContext = _httpContextAccessor.HttpContext;
 
             // get the metadata
-            var discoveryClient = new DiscoveryClient("https://localhost:44379/");
+            var discoveryClient = new DiscoveryClient("https://localhost:44374/");
             var metaDataResponse = await discoveryClient.GetAsync();
 
             // create a new token client to get new tokens
             var tokenClient = new TokenClient(metaDataResponse.TokenEndpoint,
-                "imagegalleryclient", "secret");
+                "assettrackerclient", "secret");
 
             // get the saved refresh token
             var currentRefreshToken = await currentContext
@@ -99,6 +134,6 @@ namespace AssetTracker.Client.Services
                     tokenResult.Exception);
             }
             
-        }*/
+        }
     }
 }
