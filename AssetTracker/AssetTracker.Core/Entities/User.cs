@@ -15,6 +15,7 @@ namespace AssetTracker.Core.Entities
         public string NmLast { get; set; }
         public string Email { get; set; }
 
+        public int SelectedOrganizationId { get; set; }
         public ICollection<OrganizationUser> OrganizationUsers { get; set; }
     }
 }

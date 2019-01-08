@@ -18,6 +18,12 @@ namespace AssetTracker.Core.Services
             _repository = new AssetRepository(context);
         }
 
+        public bool IsAssetOwner(string assetId, int organizationId)
+        {
+            //Implement later.  Return true for now for Authorization test.
+            return true;
+        }
+
         public Asset GetById(int id)
         {
             return _repository.GetById(id);

@@ -27,15 +27,6 @@ namespace AssetTracker.Core
         {
             if (!context.Users.Any())
             {
-                var users = new List<User>
-                {
-                    new User { NmFirst = "Roger", NmLast="Williams", Email = "gopats@ne.com"},
-                    new User { NmFirst = "John", NmLast="Routt", Email = "gowest@co.com"},
-                    new User { NmFirst = "Davey", NmLast="Crockett", Email = "furs@usa.com"},
-                };
-                context.AddRange(users);
-                context.SaveChanges();
-
                 //Now add the Organization to  User Relationships
                 var cotd = context.Organizations
                     .Include(o => o.OrganizationUsers)
@@ -44,6 +35,15 @@ namespace AssetTracker.Core
                 var netd = context.Organizations
                     .Include(o => o.OrganizationUsers)
                     .Single(s => s.Name == "New England Teardrops");
+
+                var users = new List<User>
+                {
+                    new User { NmFirst = "Roger", NmLast="Williams", Email = "gopats@ne.com", SelectedOrganizationId = cotd.Id},
+                    new User { NmFirst = "John", NmLast="Routt", Email = "gowest@co.com", SelectedOrganizationId = cotd.Id},
+                    new User { NmFirst = "Davey", NmLast="Crockett", Email = "furs@usa.com", SelectedOrganizationId = cotd.Id},
+                };
+                context.AddRange(users);
+                context.SaveChanges();
 
                 var roger = context.Users
                     .Single(s => s.NmFirst == "Roger");

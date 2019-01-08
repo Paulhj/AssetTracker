@@ -173,6 +173,8 @@ namespace AssetTracker.Core.Migrations
 
                     b.Property<string>("NmLast");
 
+                    b.Property<int>("SelectedOrganizationId");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");

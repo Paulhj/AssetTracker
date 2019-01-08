@@ -6,9 +6,13 @@
 
 <h1>Index</h1>
 
+@if (User.IsInRole("PowerUser"))
+{
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+}
+
 <table class="table">
     <thead>
         <tr>
@@ -19,8 +23,8 @@
                 Description
             </th>
             @*<th>
-                @Html.DisplayNameFor(model => model.Assets.Photo)
-            </th>*@
+                    @Html.DisplayNameFor(model => model.Assets.Photo)
+                </th>*@
             <th>
                 Create Date
             </th>
@@ -37,35 +41,36 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Assets) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tag)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            @*<td>
-            @Html.DisplayFor(modelItem => item.Photo)
-        </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.CreateDt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StatusNm)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TypeNm)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CurrentLocation.LocationNm)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.AssetId }) |
-                @Html.ActionLink("Details", "Details", new { id=item.AssetId }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.AssetId })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Assets)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tag)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Photo)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreateDt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StatusNm)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TypeNm)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CurrentLocation.LocationNm)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.AssetId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.AssetId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.AssetId })
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

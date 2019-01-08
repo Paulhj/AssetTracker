@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AssetTracker.Api.Authorization;
 using AssetTracker.Core;
 using AssetTracker.Core.Services;
 using AutoMapper;
+using IdentityServer4.AccessTokenValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace AssetTracker.Api
 {
@@ -32,6 +29,31 @@ namespace AssetTracker.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddAuthorization(authorizationOptions =>
+            {
+                authorizationOptions.AddPolicy(
+                    "MustOwnAsset",
+                    policyBuilder =>
+                    {
+                        policyBuilder.RequireAuthenticatedUser();
+                        policyBuilder.AddRequirements(
+                                new MustOwnAssetRequirement());
+                    });
+
+            });
+
+            services.AddScoped<IAuthorizationHandler, MustOwnAssetHandler>();
+
+            services.AddAuthentication(
+                IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = "https://localhost:44374/";
+                    options.ApiName = "assettrackerapi";
+                    options.ApiSecret = "apisecret";
+                });
+
             services.AddSingleton(_config);
             services.AddAutoMapper();
             services.AddDbContext<AssetTrackerContext>(options =>
@@ -57,6 +79,8 @@ namespace AssetTracker.Api
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseMvc();
         }
