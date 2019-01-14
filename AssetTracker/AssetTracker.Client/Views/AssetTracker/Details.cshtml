@@ -60,35 +60,38 @@
             
         </div>
         <div class="col-sm-6">
-            
-                <h3>Current Location</h3>
-                <dl class="row">
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.CurrentLocation.LocationNm)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.CurrentLocation.LocationNm)
-                    </dd>
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.CurrentLocation.CreateDt)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.CurrentLocation.CreateDt)
-                    </dd>
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.CurrentLocation.TransferDt)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.CurrentLocation.TransferDt)
-                    </dd>
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.CurrentLocation.Note)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.CurrentLocation.Note)
-                    </dd>
-                </dl>
-            
+
+            <h3>Current Location</h3>
+            <p>
+                @Html.ActionLink("Location History", "AssetLocationHistory", new { id = Model.AssetId })
+            </p>
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CurrentLocation.LocationNm)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CurrentLocation.LocationNm)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CurrentLocation.CreateDt)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CurrentLocation.CreateDt)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CurrentLocation.TransferDt)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CurrentLocation.TransferDt)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CurrentLocation.Note)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CurrentLocation.Note)
+                </dd>
+            </dl>
+
         </div>
         
         

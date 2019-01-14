@@ -24,9 +24,14 @@ namespace AssetTracker.Core.Services
             return true;
         }
 
-        public Asset GetById(int id)
+        //public Asset GetById(int id)
+        //{
+        //    return _repository.GetById(id);
+        //}
+
+        public async Task<Asset> GetById(int id)
         {
-            return _repository.GetById(id);
+            return await _repository.GetByIdAsync(id);
         }
 
         public async Task<IEnumerable<Asset>> GetByCriteria(

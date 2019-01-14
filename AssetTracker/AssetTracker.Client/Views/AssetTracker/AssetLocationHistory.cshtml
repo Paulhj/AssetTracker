@@ -1,0 +1,54 @@
+﻿@model AssetTracker.Client.ViewModels.AssetLocationsViewModel
+
+@{
+    ViewData["Title"] = "Asset Location History";
+}
+
+<h1>Asset Location History</h1>
+
+<p>
+    <a asp-action="Create">New Location</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+           
+            <th>
+                Location
+            </th>
+            <th>
+                Note
+            </th>
+            <th>
+                Create Dt
+            </th>
+            <th>
+                Transfer Dt
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.AssetLocations) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.LocationNm)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Note)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateDt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TransferDt)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

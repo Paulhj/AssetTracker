@@ -1,10 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
 
 namespace AssetTracker.Model
 {
-    public class AssetForCreation
+    public class AssetForUpdate
     {
         //Asset Properties
+        [Required]
+        public int Id { get; set; }
         [Required]
         [MaxLength(250)]
         public string Tag { get; set; }
@@ -14,10 +19,5 @@ namespace AssetTracker.Model
         public int StatusId { get; set; }
         [Required]
         public int TypeId { get; set; }
-
-        //Asset Location Properties
-        [Required]
-        public int LocationId { get; set; }
-        public string Note { get; set; }
     }
 }

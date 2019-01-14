@@ -25,6 +25,8 @@ namespace AssetTracker.Client.Controllers
             _assetTrackerHttpClient = assetTrackerHttpClient;
         }
 
+        #region Asset Index/Details Actions
+
         public async Task<IActionResult> Index()
         {
             await WriteOutIdentityInformation();
@@ -38,10 +40,10 @@ namespace AssetTracker.Client.Controllers
             {
                 var assetsAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 
-                var assetsViewModel = new AssetsViewModel(
+                var assetIndexViewModel = new AssetIndexViewModel(
                     JsonConvert.DeserializeObject<IList<Model.Asset>>(assetsAsString).ToList());
 
-                return View(assetsViewModel);
+                return View(assetIndexViewModel);
             }
 
             throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
@@ -64,6 +66,10 @@ namespace AssetTracker.Client.Controllers
 
             throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
         }
+
+        #endregion
+
+        #region Asset Create/Edit/Delete Actions
 
         [Authorize(Roles = "PowerUser")]
         public IActionResult Create()
@@ -90,6 +96,94 @@ namespace AssetTracker.Client.Controllers
 
             throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
         }
+
+        [Authorize(Roles = "PowerUser")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            // call the API
+            var httpClient = await _assetTrackerHttpClient.GetClient();
+
+            var response = await httpClient.GetAsync($"api/asset/{id}").ConfigureAwait(false);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var assetAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var asset = JsonConvert.DeserializeObject<Model.Asset>(assetAsString);
+                var assetForEdit = new Model.AssetForUpdate
+                {
+                    Id = asset.AssetId,
+                    Tag = asset.Tag,
+                    Description = asset.Description,
+                    Photo = asset.Photo,
+                    StatusId = asset.StatusId,
+                    TypeId = asset.TypeId
+                };
+                return View(assetForEdit);
+            }
+
+            throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
+        }
+
+        [HttpPost()]
+        [Authorize(Roles = "PowerUser")]
+        public async Task<IActionResult> Edit(Model.AssetForUpdate model)
+        {
+            // call the API
+            var httpClient = await _assetTrackerHttpClient.GetClient();
+
+            var response = await httpClient.PutAsync(
+                $"api/asset",
+                new StringContent(JsonConvert.SerializeObject(model), System.Text.Encoding.Unicode, "application/json"))
+                .ConfigureAwait(false);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+
+            throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
+        }
+
+        [Authorize(Roles = "PowerUser")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            // call the API
+            var httpClient = await _assetTrackerHttpClient.GetClient();
+
+            var response = await httpClient.DeleteAsync($"api/asset/{id}").ConfigureAwait(false);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+
+            throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
+        }
+
+        #endregion
+
+        #region AssetLocation Actions
+
+        public async Task<IActionResult> AssetLocationHistory(int id)
+        {
+            // call the API
+            var httpClient = await _assetTrackerHttpClient.GetClient();
+
+            var response = await httpClient.GetAsync($"api/asset/{id}/locations").ConfigureAwait(false);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var assetLocationsAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var assetLocationsIndexViewModel = new AssetLocationsViewModel(
+                    JsonConvert.DeserializeObject<IList<Model.AssetLocation>>(assetLocationsAsString).ToList());
+
+                return View(assetLocationsIndexViewModel);
+            }
+
+            throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
+        }
+
+        #endregion
 
         [Authorize(Policy = "CanOrderAsset")]
         public async Task<IActionResult> OrderAsset()

@@ -53,14 +53,14 @@ namespace AssetTracker.Api.Controllers
         }
 
         [HttpGet("{id}", Name = "AssetGet")]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
             //Need to verify if user allowed to get this Asset
 
             try
             {
                 var item = _mapper.Map<Model.Asset>(
-                    _service.GetById(id));
+                    await _service.GetById(id));
 
                 if (item == null)
                     return NotFound($"User with id:{id} was not found");
@@ -71,6 +71,43 @@ namespace AssetTracker.Api.Controllers
             {
                 return BadRequest(ex);
             }
+        }
+
+        [HttpPut()]
+        [Authorize(Roles = "PowerUser")]
+        public async Task<IActionResult> Put([FromBody]Model.AssetForUpdate model)
+        {
+            try
+            {
+                //Check to see if the model is Valid.  If not return the ModelState
+                if (!ModelState.IsValid) return BadRequest(ModelState);
+
+                _logger.LogInformation($"Updating Asset with ID: {model.Id}");
+
+                //Get the asset to modify and map properties
+                var item = await _service.GetById(model.Id);
+
+                if (item == null)
+                    return NotFound($"Asset with ID:{model.Id} not found in database to update");
+
+                item = _mapper.Map(model, item);
+
+                if (await _service.Update(item))
+                {
+                    return Ok(_mapper.Map<Model.Asset>(
+                        _service.GetById(model.Id)));
+                }
+            }
+            catch (EntityException ex)
+            {
+                _logger.LogWarning($"Could not save Asset to the database due to following error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Threw exception while saving Asset: {ex}");
+            }
+
+            return BadRequest();
         }
 
         [HttpPost()]
