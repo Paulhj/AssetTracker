@@ -41,7 +41,7 @@ namespace Common
         //Asynchronous Methods
         public async Task<TEntity> GetAsync(int id)
         {
-            return await _context.Set<TEntity>().Where(e => e.Id == id).FirstOrDefaultAsync();
+            return await _context.Set<TEntity>().FindAsync(id);
         }
 
         public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)

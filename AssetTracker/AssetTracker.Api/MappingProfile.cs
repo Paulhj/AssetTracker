@@ -31,6 +31,7 @@ namespace AssetTracker.Api
                            opts => opts.MapFrom(src => src.Id));
 
             CreateMap<Model.AssetForCreation, Asset>();
+            CreateMap<Model.AssetForUpdate, Asset>();
         }
     }
 }

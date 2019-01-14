@@ -2,7 +2,6 @@
 using AssetTracker.Core.Entities;
 using Common;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,6 +24,15 @@ namespace AssetTracker.Core.Repositories
                 .Include(t => t.Type)
                 .Include(l => l.AssetLocations).ThenInclude(n => n.Location)
                 .FirstOrDefault(f => f.Id == id);
+        }
+
+        public async Task<Asset> GetByIdAsync(int id)
+        {
+            return await AssetTrackerContext.Assets
+                .Include(s => s.Status)
+                .Include(t => t.Type)
+                .Include(l => l.AssetLocations).ThenInclude(n => n.Location)
+                .FirstOrDefaultAsync(f => f.Id == id);
         }
 
         public async Task<IEnumerable<Asset>> GetByCriteria(

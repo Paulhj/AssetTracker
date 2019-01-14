@@ -10,7 +10,7 @@ namespace AssetTracker.Core.Services
         Task<bool> Create(Asset item);
         Task<bool> Delete(int id);
         Task<IEnumerable<Asset>> GetByCriteria(int organizationId, AssetCriteria criteria);
-        Asset GetById(int id);
+        Task<Asset> GetById(int id);
         Task<bool> Update(Asset item);
         bool IsAssetOwner(string assetId, int organizationId);
     }

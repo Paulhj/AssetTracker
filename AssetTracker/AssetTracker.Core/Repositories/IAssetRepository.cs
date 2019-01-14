@@ -12,5 +12,6 @@ namespace AssetTracker.Core.Repositories
 
         Task<IEnumerable<Asset>> GetByCriteria(int organizationId, AssetCriteria criteria);
         Asset GetById(int id);
+        Task<Asset> GetByIdAsync(int id);
     }
 }

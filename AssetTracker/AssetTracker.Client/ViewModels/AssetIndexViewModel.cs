@@ -2,12 +2,12 @@
 
 namespace AssetTracker.Client.ViewModels
 {
-    public class AssetsViewModel
+    public class AssetIndexViewModel
     {
         public IEnumerable<Model.Asset> Assets { get; private set; }
             = new List<Model.Asset>();
 
-        public AssetsViewModel(List<Model.Asset> assets)
+        public AssetIndexViewModel(List<Model.Asset> assets)
         {
             Assets = assets;
         }

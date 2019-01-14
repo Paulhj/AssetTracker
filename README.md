@@ -20,5 +20,12 @@ Initial Setup Tasks Completed 1st Pull Request (12/28/2018):
 2. Added some test users and configured the client to use the IDP to authenticate the user.
 3. Added authentication to the API so it will use the IDP to make sure the user has permission to access the API.
 4. Implemented role-based access control, an attribute-based access control and extended authorization policy with a custom requirements handler.
-5. Implemented the Post for creating Asses on the API.
+5. Implemented the Post for creating Assets on the API.
 6. Implemented the Create New Asset functionality on the client.
+
+4th Pull Request (1/14/2019):
+
+1. Implemented Asset Update and Delete on client and api.
+2. Added association controller LocationContoller.
+3. Implemented the Get on LocationController passing in Asset id to get a list of the Asset Location history. 
+4. Set authorization policy of MustOwnAsset on LocationController Get action.
