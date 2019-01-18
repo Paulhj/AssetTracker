@@ -65,6 +65,9 @@
             <p>
                 @Html.ActionLink("Location History", "AssetLocationHistory", new { id = Model.AssetId })
             </p>
+            <p>
+                @Html.ActionLink("Add New Location", "AssetLocationCreate", new { assetId = Model.AssetId })
+            </p>
             <dl class="row">
                 <dt class="col-sm-2">
                     @Html.DisplayNameFor(model => model.CurrentLocation.LocationNm)

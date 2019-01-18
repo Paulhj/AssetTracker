@@ -18,8 +18,8 @@ namespace AssetTracker.Core.Repositories
 
         public Status GetById(int id)
         {
-            return AssetTrackerContext.Statuses
-                .FirstOrDefault(f => f.Id == id);
+            return null; // AssetTrackerContext.Statuses
+                //.FirstOrDefault(f => f.Id == id);
         }
 
         public async Task<IEnumerable<Status>> GetByOrganizationId(int organizationId)

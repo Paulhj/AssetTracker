@@ -17,9 +17,9 @@ namespace AssetTracker.Core.Services
             _userRepository = new UserRepository(context);
         }
 
-        public Organization GetById(int id)
+        public async Task<Organization> GetById(int id)
         {
-            return _repository.GetById(id);
+            return await _repository.GetById(id);
         }
 
         public async Task<IEnumerable<Organization>> GetByUserId(
@@ -53,7 +53,7 @@ namespace AssetTracker.Core.Services
 
         public async Task<bool> Delete(int id)
         {
-            var item = _repository.GetById(id);
+            var item = await _repository.GetById(id);
 
             //Execute domain validation for the update page operation
             Validate(item, Operation.Delete);

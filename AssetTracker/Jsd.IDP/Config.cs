@@ -14,7 +14,7 @@ namespace Jsd.IDP
             {
                 new TestUser
                 {
-                    SubjectId = "9",
+                    SubjectId = "12",
                     Username = "Roger",
                     Password = "password",
 
@@ -25,12 +25,13 @@ namespace Jsd.IDP
                         new Claim("address", "Main Road 1"),
                         new Claim("role", "PowerUser"),
                         new Claim("subscriptionlevel", "FreeUser"),
-                        new Claim("country", "usa")
+                        new Claim("country", "usa"),
+                        new Claim("selectedOrganization", "7")
                     }
                 },
                 new TestUser
                 {
-                    SubjectId = "10",
+                    SubjectId = "13",
                     Username = "John",
                     Password = "password",
 
@@ -41,12 +42,13 @@ namespace Jsd.IDP
                         new Claim("address", "Big Street 2"),
                         new Claim("role", "PowerUser"),
                         new Claim("subscriptionlevel", "PayingUser"),
-                        new Claim("country", "usa")
+                        new Claim("country", "usa"),
+                        new Claim("selectedOrganization", "7")
                     }
                 },
                 new TestUser
                 {
-                    SubjectId = "11",
+                    SubjectId = "14",
                     Username = "Davey",
                     Password = "password",
 
@@ -57,7 +59,8 @@ namespace Jsd.IDP
                         new Claim("address", "Big Street 2"),
                         new Claim("role", "BasicUser"),
                         new Claim("subscriptionlevel", "PayingUser"),
-                        new Claim("country", "usa")
+                        new Claim("country", "usa"),
+                        new Claim("selectedOrganization", "7")
                     }
                 }
             };
@@ -80,6 +83,10 @@ namespace Jsd.IDP
                     "The country you're living in",
                     new List<string>() { "country" }),
                 new IdentityResource(
+                    "selectedOrganization",
+                    "The selected organization for user",
+                    new List<string>() { "selectedOrganization" }),
+                new IdentityResource(
                     "subscriptionlevel",
                     "Your subscription level",
                     new List<string>() { "subscriptionlevel" })
@@ -92,7 +99,7 @@ namespace Jsd.IDP
             return new List<ApiResource>
             {
                 new ApiResource("assettrackerapi", "Asset Tracker Api",
-                new List<string>() { "role" })
+                new List<string>() { "role", "selectedOrganization" })
                 {
                     ApiSecrets = { new Secret("apisecret".Sha256()) }
                 }
@@ -111,7 +118,7 @@ namespace Jsd.IDP
                     AccessTokenType = AccessTokenType.Reference,
                     //IdentityTokenLifetime = ...
                     //AuthorizationCodeLifetime = ...
-                    AccessTokenLifetime = 120,
+                    //AccessTokenLifetime = 120,
                     AllowOfflineAccess = true,
                     //AbsoluteRefreshTokenLifetime = ...
                     UpdateAccessTokenClaimsOnRefresh = true,
@@ -131,6 +138,7 @@ namespace Jsd.IDP
                         "roles",
                         "assettrackerapi",
                         "country",
+                        "selectedOrganization",
                         "subscriptionlevel"
                     },
                     ClientSecrets =

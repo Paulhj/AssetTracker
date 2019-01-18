@@ -34,6 +34,8 @@ namespace AssetTracker.Client.Controllers
             // call the API
             var httpClient = await _assetTrackerHttpClient.GetClient();
 
+            //SetViewBagLists(httpClient);
+            
             var response = await httpClient.GetAsync("api/asset").ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
@@ -72,9 +74,23 @@ namespace AssetTracker.Client.Controllers
         #region Asset Create/Edit/Delete Actions
 
         [Authorize(Roles = "PowerUser")]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            // call the API
+            var httpClient = await _assetTrackerHttpClient.GetClient();
+
+            var response = await httpClient.GetAsync(
+                $"api/asset/GetAssetForCreation").ConfigureAwait(false);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var assetForCreationAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var assetForCreation = JsonConvert.DeserializeObject<Model.AssetForCreation>(assetForCreationAsString);
+
+                return View(assetForCreation);
+            }
+
+            throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
         }
 
         [HttpPost()]
@@ -103,22 +119,13 @@ namespace AssetTracker.Client.Controllers
             // call the API
             var httpClient = await _assetTrackerHttpClient.GetClient();
 
-            var response = await httpClient.GetAsync($"api/asset/{id}").ConfigureAwait(false);
+            var response = await httpClient.GetAsync($"api/asset/GetAssetForUpdate/{id}").ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
-                var assetAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                var asset = JsonConvert.DeserializeObject<Model.Asset>(assetAsString);
-                var assetForEdit = new Model.AssetForUpdate
-                {
-                    Id = asset.AssetId,
-                    Tag = asset.Tag,
-                    Description = asset.Description,
-                    Photo = asset.Photo,
-                    StatusId = asset.StatusId,
-                    TypeId = asset.TypeId
-                };
-                return View(assetForEdit);
+                var assetForUpdateAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var assetForUpdate = JsonConvert.DeserializeObject<Model.AssetForUpdate>(assetForUpdateAsString);
+                return View(assetForUpdate);
             }
 
             throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
@@ -183,6 +190,32 @@ namespace AssetTracker.Client.Controllers
             throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
         }
 
+        [Authorize(Roles = "PowerUser")]
+        public IActionResult AssetLocationCreate(int assetId)
+        {
+            return View(new Model.AssetLocationForCreation { AssetId = assetId });
+        }
+
+        [HttpPost()]
+        [Authorize(Roles = "PowerUser")]
+        public async Task<IActionResult> AssetLocationCreate(Model.AssetLocationForCreation model)
+        {
+            // call the API
+            var httpClient = await _assetTrackerHttpClient.GetClient();
+
+            var response = await httpClient.PostAsync(
+                $"api/asset/{model.AssetId}/locations",
+                new StringContent(JsonConvert.SerializeObject(model), System.Text.Encoding.Unicode, "application/json"))
+                .ConfigureAwait(false);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+
+            throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
+        }
+
         #endregion
 
         [Authorize(Policy = "CanOrderAsset")]
@@ -207,6 +240,27 @@ namespace AssetTracker.Client.Controllers
             var address = response.Claims.FirstOrDefault(c => c.Type == "address")?.Value;
 
             return View(new OrderFromViewModel(address));
+        }
+
+        #region Support Methods
+
+        private async void SetViewBagLists(HttpClient httpClient)
+        {
+            //Get the selected organization id.
+            var id = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "selectedOrganization").Value);
+
+            var response = await httpClient.GetAsync($"api/organization/{id}").ConfigureAwait(false);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var organizationAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                var organization = JsonConvert.DeserializeObject<Model.Organization>(organizationAsString);
+
+                //ViewBag.Locations = organization.Locations;
+                ViewData["Statuses"] = organization.Statuses;
+                //ViewBag.Types = organization.Types;
+            }
         }
 
         public async Task WriteOutIdentityInformation()
@@ -272,5 +326,7 @@ namespace AssetTracker.Client.Controllers
             await HttpContext.SignOutAsync("Cookies");
             await HttpContext.SignOutAsync("oidc");
         }
+
+        #endregion
     }
 }

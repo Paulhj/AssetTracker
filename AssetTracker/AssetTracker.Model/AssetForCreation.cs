@@ -1,9 +1,22 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace AssetTracker.Model
 {
-    public class AssetForCreation
+    public class AssetForCreation : AssetDropDownLists
     {
+        public AssetForCreation()
+        {  }
+
+        public AssetForCreation(
+            IEnumerable<Location> locations,
+            IEnumerable<Status> statuses,
+            IEnumerable<Type> types) 
+            : base(locations, statuses, types)
+        {
+
+        }
+
         //Asset Properties
         [Required]
         [MaxLength(250)]

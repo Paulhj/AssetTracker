@@ -17,8 +17,8 @@ namespace AssetTracker.Core.Repositories
 
         public Entities.Type GetById(int id)
         {
-            return AssetTrackerContext.Types
-                .FirstOrDefault(f => f.Id == id);
+            return null; // AssetTrackerContext.Types
+                //.FirstOrDefault(f => f.Id == id);
         }
 
         public async Task<IEnumerable<Entities.Type>> GetByOrganizationId(int organizationId)

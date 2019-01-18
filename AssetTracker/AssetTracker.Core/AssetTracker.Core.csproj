@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20190116152942_FixedAssetLocationManyToMany.cs" />
+    <Compile Remove="Migrations\20190116153507_FixedAssetLocationManyToMany2.cs" />
+    <Compile Remove="Migrations\20190116154806_FixedAssetLocationManyToMany3.cs" />
+    <Compile Remove="Migrations\20190116155957_Organization_Location_Status_Type.cs" />
+    <Compile Remove="Migrations\20190116160847_Organization_Location_Status_Type2.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.0">
       <PrivateAssets>all</PrivateAssets>

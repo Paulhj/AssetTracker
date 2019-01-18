@@ -17,9 +17,9 @@ namespace AssetTracker.Core
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Asset> Assets { get; set; }
-        public DbSet<Location> Locations { get; set; }
-        public DbSet<Status> Statuses { get; set; }
-        public DbSet<Type> Types { get; set; }
+        //public DbSet<Location> Locations { get; set; }
+        //public DbSet<Status> Statuses { get; set; }
+        //public DbSet<Type> Types { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -34,8 +34,46 @@ namespace AssetTracker.Core
             modelBuilder.Entity<AssetOrganization>()
                 .HasKey(k => new { k.AssetId, k.OrganizationId });
 
+            modelBuilder.Entity<Asset>()
+                .HasMany(l => l.AssetLocations)
+                .WithOne(a => a.Asset)
+                .IsRequired();
+
+            modelBuilder.Entity<Asset>()
+                .HasOne(s => s.Status)
+                .WithMany(m => m.Assets)
+                .HasForeignKey(k => k.StatusId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Asset>()
+                .HasOne(s => s.Type)
+                .WithMany(m => m.Assets)
+                .HasForeignKey(k => k.TypeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<AssetLocation>()
-                .HasKey(k => new { k.AssetId, k.LocationId });
+                .HasOne(o => o.Location)
+                .WithMany(l => l.AssetLocations)
+                .HasForeignKey(k => k.LocationId)
+                .OnDelete(DeleteBehavior.Restrict);
+            
+            modelBuilder.Entity<Location>()
+                .HasOne(l => l.Organization)
+                .WithMany(m => m.Locations)
+                .HasForeignKey(k => k.OrganizationId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Status>()
+                .HasOne(l => l.Organization)
+                .WithMany(a => a.Statuses)
+                .HasForeignKey(k => k.OrganizationId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Type>()
+                .HasOne(l => l.Organization)
+                .WithMany(a => a.Types)
+                .HasForeignKey(k => k.OrganizationId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

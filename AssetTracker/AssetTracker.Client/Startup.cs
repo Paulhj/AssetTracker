@@ -81,6 +81,7 @@ namespace AssetTracker.Client
                   options.Scope.Add("roles");
                   options.Scope.Add("country");
                   options.Scope.Add("subscriptionlevel");
+                  options.Scope.Add("selectedOrganization");
                   options.Scope.Add("assettrackerapi");
                   options.Scope.Add("offline_access");
                   options.SaveTokens = true;
@@ -93,6 +94,7 @@ namespace AssetTracker.Client
                   options.ClaimActions.MapUniqueJsonKey("role", "role");
                   options.ClaimActions.MapUniqueJsonKey("subscriptionlevel", "subscriptionlevel");
                   options.ClaimActions.MapUniqueJsonKey("country", "country");
+                  options.ClaimActions.MapUniqueJsonKey("selectedOrganization", "selectedOrganization");
 
                   options.TokenValidationParameters = new TokenValidationParameters
                   {

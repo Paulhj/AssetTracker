@@ -15,6 +15,10 @@ namespace AssetTracker.Core.Entities
         public int Id { get; set; }
 
         [Required]
+        public int OrganizationId { get; set; }
+        public Organization Organization { get; set; }
+
+        [Required]
         [StringLength(250, ErrorMessage = "Location Name cannot exceed 250 characters.")]
         public string Name { get; set; }
 

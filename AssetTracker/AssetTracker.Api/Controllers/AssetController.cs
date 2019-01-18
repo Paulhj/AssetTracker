@@ -18,16 +18,19 @@ namespace AssetTracker.Api.Controllers
     {
         private readonly IAssetService _service;
         private readonly IUserService _userService;
+        private readonly IOrganizationService _organizationService;
         private readonly IMapper _mapper;
         private readonly ILogger<AssetController> _logger;
 
         public AssetController(IAssetService service,
             IUserService userService,
+            IOrganizationService organizationService,
             IMapper mapper, 
             ILogger<AssetController> logger)
         {
             _service = service;
             _userService = userService;
+            _organizationService = organizationService;
             _mapper = mapper;
             _logger = logger;
         }
@@ -35,8 +38,7 @@ namespace AssetTracker.Api.Controllers
         [HttpGet()]
         public async Task<IActionResult> Get()
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == "sub").Value;
-            var organizationId = _userService.GetById(Convert.ToInt32(userId)).SelectedOrganizationId;
+            var organizationId = User.Claims.FirstOrDefault(c => c.Type == "selectedOrganization").Value;
             var criteria = new AssetCriteria();
 
             try
@@ -63,7 +65,7 @@ namespace AssetTracker.Api.Controllers
                     await _service.GetById(id));
 
                 if (item == null)
-                    return NotFound($"User with id:{id} was not found");
+                    return NotFound($"Asset with id:{id} was not found");
 
                 return Ok(item);
             }
@@ -71,6 +73,41 @@ namespace AssetTracker.Api.Controllers
             {
                 return BadRequest(ex);
             }
+        }
+
+        [HttpGet("GetAssetForUpdate/{id}")]
+        [Authorize(Roles = "PowerUser")]
+        public async Task<IActionResult> GetAssetForUpdate(int id)
+        {
+            try
+            {
+                var assetForUpdate = _mapper.Map<Model.AssetForUpdate>(await _service.GetById(id));
+
+                if (assetForUpdate == null)
+                    return NotFound($"Asset with id:{id} was not found");
+
+                var organizationId = User.Claims.FirstOrDefault(c => c.Type == "selectedOrganization").Value;
+                var organization = await _organizationService.GetById(Convert.ToInt32(organizationId));
+
+                if (organization == null)
+                    return NotFound($"Organization with ID:{organizationId} not found in database to get lookup lists from.");
+
+                assetForUpdate.Locations = _mapper.Map<IEnumerable<Model.Location>>(organization.Locations);
+                assetForUpdate.Statuses = _mapper.Map<IEnumerable<Model.Status>>(organization.Statuses);
+                assetForUpdate.Types = _mapper.Map<IEnumerable<Model.Type>>(organization.Types);
+                
+                return Ok(assetForUpdate);
+            }
+            catch (EntityException ex)
+            {
+                _logger.LogWarning($"Could not create a new Asset to the database due to following error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Threw exception while creating Asset: {ex}");
+            }
+
+            return BadRequest();
         }
 
         [HttpPut()]
@@ -105,6 +142,38 @@ namespace AssetTracker.Api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Threw exception while saving Asset: {ex}");
+            }
+
+            return BadRequest();
+        }
+
+        [HttpGet("GetAssetForCreation")]
+        [Authorize(Roles = "PowerUser")]
+        public async Task<IActionResult> GetAssetForCreation()
+        {
+            try
+            {
+                var organizationId = User.Claims.FirstOrDefault(c => c.Type == "selectedOrganization").Value;
+
+                var organization = await _organizationService.GetById(Convert.ToInt32(organizationId));
+
+                if (organization == null)
+                    return NotFound($"Organization with ID:{organizationId} not found in database to get lookup lists from.");
+
+                var assetForCreation = new Model.AssetForCreation(
+                    _mapper.Map<IEnumerable<Model.Location>>(organization.Locations),
+                    _mapper.Map<IEnumerable<Model.Status>>(organization.Statuses),
+                    _mapper.Map<IEnumerable<Model.Type>>(organization.Types));
+
+                return Ok(assetForCreation);
+            }
+            catch (EntityException ex)
+            {
+                _logger.LogWarning($"Could not create a new Asset to the database due to following error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Threw exception while creating Asset: {ex}");
             }
 
             return BadRequest();

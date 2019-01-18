@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AssetTracker.Api.Controllers
@@ -25,12 +26,12 @@ namespace AssetTracker.Api.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Get()
         {
-            var id = 6; //TODO get this from Authentication
+            var id = User.Claims.FirstOrDefault(c => c.Type == "sub").Value;
 
             try
             {
                 var item = _mapper.Map<Model.User>(
-                    _service.GetById(id));
+                    await _service.GetByIdAsync(Convert.ToInt32(id)));
 
                 return Ok(item);
             }

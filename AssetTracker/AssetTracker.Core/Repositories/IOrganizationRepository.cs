@@ -9,7 +9,7 @@ namespace AssetTracker.Core.Repositories
     {
         AssetTrackerContext AssetTrackerContext { get; }
 
-        Organization GetById(int id);
+        Task<Organization> GetById(int id);
         Task<IEnumerable<Organization>> GetByUserId(int userId);
     }
 }
