@@ -9,7 +9,9 @@ namespace AssetTracker.Core.Services
         Task<bool> Create(User item);
         Task<bool> Delete(int id);
         User GetById(int id);
+        Task<User> GetByIdAsync(int id);
         Task<IEnumerable<User>> GetByOrganizationId(int organizationId);
         Task<bool> Update(User item);
+        bool UserBelongToOrganization(int userId, int organizationId);
     }
 }

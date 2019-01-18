@@ -3,6 +3,7 @@ using AssetTracker.Core.Repositories;
 using Common;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,6 +18,22 @@ namespace AssetTracker.Core.Services
             _repository = new UserRepository(context);
         }
 
+        #region Authorization Support Methods
+
+        public bool UserBelongToOrganization(int userId, int organizationId)
+        {
+            var user = _repository.GetById(userId);
+
+            if (user.OrganizationUsers.Any(o => o.OrganizationId == organizationId))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        #endregion
+
         public IEnumerable<User> GetAll()
         {
             return _repository.GetAll();
@@ -25,6 +42,11 @@ namespace AssetTracker.Core.Services
         public User GetById(int id)
         {
             return _repository.GetById(id);
+        }
+
+        public async Task<User> GetByIdAsync(int id)
+        {
+            return await _repository.GetByIdAsync(id);
         }
 
         public async Task<IEnumerable<User>> GetByOrganizationId(
@@ -58,7 +80,7 @@ namespace AssetTracker.Core.Services
 
         public async Task<bool> Delete(int id)
         {
-            var item = _repository.GetById(id);
+            var item = await _repository.GetByIdAsync(id);
 
             //Execute domain validation for the update page operation
             Validate(item, Operation.Delete);

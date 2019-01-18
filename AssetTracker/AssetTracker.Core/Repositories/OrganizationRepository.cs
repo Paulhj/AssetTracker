@@ -17,11 +17,14 @@ namespace AssetTracker.Core.Repositories
 
         }
 
-        public Organization GetById(int id)
+        public async Task<Organization> GetById(int id)
         {
-            return AssetTrackerContext.Organizations
+            return await AssetTrackerContext.Organizations
                 .Include(u => u.OrganizationUsers)
-                .FirstOrDefault(f => f.Id == id);
+                .Include(l => l.Locations)
+                .Include(s => s.Statuses)
+                .Include(t => t.Types)
+                .FirstOrDefaultAsync(f => f.Id == id);
         }
 
         public async Task<IEnumerable<Organization>> GetByUserId(int userId)

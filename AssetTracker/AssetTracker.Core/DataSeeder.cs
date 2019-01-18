@@ -84,56 +84,51 @@ namespace AssetTracker.Core
 
         public static void SeedLocations(AssetTrackerContext context)
         {
-            if (!context.Locations.Any())
+            var cotd = context.Organizations
+                .Include(o => o.OrganizationUsers)
+                .Include(l => l.Locations)
+                .Single(s => s.Name == "Colorado Teardrops");
+
+            if (!cotd.Locations.Any())
             {
-                var items = new List<Location>
-                {
-                    new Location { Name = "Main Warehouse" },
-                    new Location { Name = "South Storage Unit" },
-                    new Location { Name = "Showroom" }
-                };
-                context.AddRange(items);
+                cotd.Locations.Add(new Location { Name = "Main Warehouse", OrganizationId = cotd.Id });
+                cotd.Locations.Add(new Location { Name = "South Storage Unit", OrganizationId = cotd.Id });
+                cotd.Locations.Add(new Location { Name = "Showroom", OrganizationId = cotd.Id });
                 context.SaveChanges();
             }
         }
 
         public static void SeedStatus(AssetTrackerContext context)
         {
-            if (!context.Statuses.Any())
-            {
-                var cotd = context.Organizations
-                    .Include(o => o.OrganizationUsers)
-                    .Single(s => s.Name == "Colorado Teardrops");
+            var cotd = context.Organizations
+                   .Include(o => o.OrganizationUsers)
+                   .Include(s => s.Statuses)
+                   .Single(s => s.Name == "Colorado Teardrops");
 
-                var items = new List<Status>
-                {
-                    new Status { Name = "Received", OrganizationId = cotd.Id },
-                    new Status { Name = "Available", OrganizationId = cotd.Id },
-                    new Status { Name = "Hold", OrganizationId = cotd.Id },
-                    new Status { Name = "Sold", OrganizationId = cotd.Id }
-                };
-                context.AddRange(items);
+            if (!cotd.Statuses.Any())
+            {
+                cotd.Statuses.Add(new Status { Name = "Received", OrganizationId = cotd.Id });
+                cotd.Statuses.Add(new Status { Name = "Available", OrganizationId = cotd.Id });
+                cotd.Statuses.Add(new Status { Name = "Hold", OrganizationId = cotd.Id });
+                cotd.Statuses.Add(new Status { Name = "Sold", OrganizationId = cotd.Id });
                 context.SaveChanges();
             }
         }
 
         public static void SeedType(AssetTrackerContext context)
         {
-            if (!context.Types.Any())
-            {
-                var cotd = context.Organizations
+            var cotd = context.Organizations
                     .Include(o => o.OrganizationUsers)
+                    .Include(t => t.Types)
                     .Single(s => s.Name == "Colorado Teardrops");
 
-                var items = new List<Entities.Type>
-                {
-                    new Entities.Type { Name = "Basedrop", OrganizationId = cotd.Id },
-                    new Entities.Type { Name = "Canyonland", OrganizationId = cotd.Id },
-                    new Entities.Type { Name = "Mount Massive", OrganizationId = cotd.Id },
-                    new Entities.Type { Name = "The Summit", OrganizationId = cotd.Id },
-                    new Entities.Type { Name = "Custom", OrganizationId = cotd.Id }
-                };
-                context.AddRange(items);
+            if (!cotd.Types.Any())
+            {
+                cotd.Types.Add(new Entities.Type { Name = "Basedrop", OrganizationId = cotd.Id });
+                cotd.Types.Add(new Entities.Type { Name = "Canyonland", OrganizationId = cotd.Id });
+                cotd.Types.Add(new Entities.Type { Name = "Mount Massive", OrganizationId = cotd.Id });
+                cotd.Types.Add(new Entities.Type { Name = "The Summit", OrganizationId = cotd.Id });
+                cotd.Types.Add(new Entities.Type { Name = "Custom", OrganizationId = cotd.Id });
                 context.SaveChanges();
             }
         }
@@ -146,20 +141,20 @@ namespace AssetTracker.Core
 
                 var netd = context.Organizations.Single(s => s.Name == "New England Teardrops");
 
-                var baseType = context.Types.Single(s => s.Name == "Basedrop");
-                var canyonType = context.Types.Single(s => s.Name == "Canyonland");
-                var massiveType = context.Types.Single(s => s.Name == "Mount Massive");
-                var summitType = context.Types.Single(s => s.Name == "The Summit");
-                var customType = context.Types.Single(s => s.Name == "Custom");
+                var baseType = cotd.Types.Single(s => s.Name == "Basedrop");
+                var canyonType = cotd.Types.Single(s => s.Name == "Canyonland");
+                var massiveType = cotd.Types.Single(s => s.Name == "Mount Massive");
+                var summitType = cotd.Types.Single(s => s.Name == "The Summit");
+                var customType = cotd.Types.Single(s => s.Name == "Custom");
 
-                var recStatus = context.Statuses.Single(s => s.Name == "Received");
-                var availStatus = context.Statuses.Single(s => s.Name == "Available");
-                var holdStatus = context.Statuses.Single(s => s.Name == "Hold");
-                var soldStatus = context.Statuses.Single(s => s.Name == "Sold");
+                var recStatus = cotd.Statuses.Single(s => s.Name == "Received");
+                var availStatus = cotd.Statuses.Single(s => s.Name == "Available");
+                var holdStatus = cotd.Statuses.Single(s => s.Name == "Hold");
+                var soldStatus = cotd.Statuses.Single(s => s.Name == "Sold");
 
-                var mainLocation = context.Locations.Single(s => s.Name == "Main Warehouse");
-                var southLocation = context.Locations.Single(s => s.Name == "South Storage Unit");
-                var showLocation = context.Locations.Single(s => s.Name == "Showroom");
+                var mainLocation = cotd.Locations.Single(s => s.Name == "Main Warehouse");
+                var southLocation = cotd.Locations.Single(s => s.Name == "South Storage Unit");
+                var showLocation = cotd.Locations.Single(s => s.Name == "Showroom");
 
                 //First Asset
                 var newasset = new Asset

@@ -10,6 +10,10 @@ namespace AssetTracker.Core.Entities
         {
             OrganizationUsers = new HashSet<OrganizationUser>();
             AssetOrganizations = new HashSet<AssetOrganization>();
+
+            Locations = new HashSet<Location>();
+            Statuses = new HashSet<Status>();
+            Types = new HashSet<Type>();
         }
 
         [Required]
@@ -21,5 +25,9 @@ namespace AssetTracker.Core.Entities
 
         public ICollection<OrganizationUser> OrganizationUsers { get; set; }
         public ICollection<AssetOrganization> AssetOrganizations { get; set; }
+
+        public ICollection<Location> Locations { get; set; }
+        public ICollection<Status> Statuses { get; set; }
+        public ICollection<Type> Types { get; set; }
     }
 }

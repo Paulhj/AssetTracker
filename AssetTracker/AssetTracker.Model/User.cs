@@ -10,5 +10,6 @@ namespace AssetTracker.Model
         public string NmFirst { get; set; }
         public string NmLast { get; set; }
         public string Email { get; set; }
+        public int SelectedOrganizationId { get; set; }
     }
 }

@@ -8,11 +8,12 @@ namespace AssetTracker.Api
     {
         public MappingProfile()
         {
-            CreateMap<Organization, Model.Organization>()
-                .ReverseMap();
+            CreateMap<Organization, Model.Organization>().ReverseMap();
+            CreateMap<Location, Model.Location>().ReverseMap();
+            CreateMap<Status, Model.Status>().ReverseMap();
+            CreateMap<Type, Model.Type>().ReverseMap();
 
-            CreateMap<User, Model.User>()
-                .ReverseMap();
+            CreateMap<User, Model.User>().ReverseMap();
 
             CreateMap<AssetLocation, Model.AssetLocation>()
                 .ForMember(dest => dest.LocationNm,
@@ -30,8 +31,8 @@ namespace AssetTracker.Api
                 .ForMember(dest => dest.AssetId,
                            opts => opts.MapFrom(src => src.Id));
 
-            CreateMap<Model.AssetForCreation, Asset>();
-            CreateMap<Model.AssetForUpdate, Asset>();
+            CreateMap<Asset, Model.AssetForCreation>().ReverseMap();
+            CreateMap<Asset, Model.AssetForUpdate>().ReverseMap();
         }
     }
 }

@@ -25,6 +25,13 @@ namespace AssetTracker.Core.Repositories
                 .FirstOrDefault(f => f.Id == id);
         }
 
+        public async Task<User> GetByIdAsync(int id)
+        {
+            return await AssetTrackerContext.Users
+                .Include(u => u.OrganizationUsers)
+                .FirstOrDefaultAsync(f => f.Id == id);
+        }
+
         public async Task<IEnumerable<User>> GetByOrganizationId(int organizationId)
         {
             IQueryable<User> query =

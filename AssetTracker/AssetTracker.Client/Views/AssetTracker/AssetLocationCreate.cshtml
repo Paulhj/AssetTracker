@@ -1,0 +1,41 @@
+﻿@model AssetTracker.Model.AssetLocationForCreation
+
+@{
+    ViewData["Title"] = "Asset Location Create";
+}
+
+<h1>AssetLocationCreate</h1>
+
+<h4>AssetLocationForCreation</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AssetLocationCreate">
+            <input asp-for="AssetId" hidden />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="LocationId" class="control-label"></label>
+                <input asp-for="LocationId" class="form-control" />
+                <span asp-validation-for="LocationId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Note" class="control-label"></label>
+                <input asp-for="Note" class="form-control" />
+                <span asp-validation-for="Note" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreateDt" class="control-label"></label>
+                <input asp-for="CreateDt" class="form-control" />
+                <span asp-validation-for="CreateDt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

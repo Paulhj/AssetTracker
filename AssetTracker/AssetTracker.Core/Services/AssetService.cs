@@ -2,9 +2,7 @@
 using AssetTracker.Core.Entities;
 using AssetTracker.Core.Repositories;
 using Common;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AssetTracker.Core.Services
@@ -18,16 +16,17 @@ namespace AssetTracker.Core.Services
             _repository = new AssetRepository(context);
         }
 
+        #region Authorization Support Methods
+
         public bool IsAssetOwner(string assetId, int organizationId)
         {
             //Implement later.  Return true for now for Authorization test.
             return true;
         }
 
-        //public Asset GetById(int id)
-        //{
-        //    return _repository.GetById(id);
-        //}
+        #endregion
+
+        #region Fetch Methods
 
         public async Task<Asset> GetById(int id)
         {
@@ -43,6 +42,10 @@ namespace AssetTracker.Core.Services
                     criteria
                 );
         }
+
+        #endregion
+
+        #region Create / Update / Delete Methods
 
         public async Task<bool> Create(Asset item)
         {
@@ -76,6 +79,10 @@ namespace AssetTracker.Core.Services
             return await CompleteAsync();
         }
 
+        #endregion
+
+        #region Validation Methods
+
         // Domain Validation - Put business rules here
         protected override void ValidationRules(Asset item, Operation operation)
         {
@@ -106,5 +113,7 @@ namespace AssetTracker.Core.Services
 
             
         }
+
+        #endregion
     }
 }

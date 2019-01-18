@@ -41,6 +41,14 @@ namespace AssetTracker.Api
                                 new MustOwnAssetRequirement());
                     });
 
+                authorizationOptions.AddPolicy(
+                    "MustBelongToOrganization",
+                    policyBuilder =>
+                    {
+                        policyBuilder.RequireAuthenticatedUser();
+                        policyBuilder.AddRequirements(
+                                new MustBelongToOrganizationRequirement());
+                    });
             });
 
             services.AddScoped<IAuthorizationHandler, MustOwnAssetHandler>();
@@ -62,6 +70,7 @@ namespace AssetTracker.Api
             services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAssetService, AssetService>();
+            services.AddScoped<IAssetLocationService, AssetLocationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

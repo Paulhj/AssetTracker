@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AssetTracker.Model
 {
-    public class AssetForUpdate
+    public class AssetForUpdate : AssetDropDownLists
     {
         //Asset Properties
         [Required]

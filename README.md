@@ -29,3 +29,11 @@ Initial Setup Tasks Completed 1st Pull Request (12/28/2018):
 2. Added association controller LocationContoller.
 3. Implemented the Get on LocationController passing in Asset id to get a list of the Asset Location history. 
 4. Set authorization policy of MustOwnAsset on LocationController Get action.
+
+5th Pull Request (1/18/2019):
+
+1. Implemented Create on LocationController.
+2. Re-architected the database base to add OrgainizationId to the Locations table.
+3. Added selectedOrganization claim to the client and api.
+4. Updated OrganizationContoller to use the selectedOrganization claim.
+5. Implemented Locations, Statuses and Types drop down lists for Asset Create and Update.
